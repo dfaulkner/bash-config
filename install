@@ -1,0 +1,58 @@
+#!/bin/bash
+
+usage_short(){ echo "usage: $(basename $0) [-hl]" ; }
+usage() {
+	# eventually want to add [-u user] [-p path] and -s (system) options.
+	usage_short
+	echo -e "\t-h\tDisplay this help text"
+	echo -e "\t-l\tInstall via Symlinks to these files instead of copying"
+	echo -e "\t\t(Don't move this dir after, or you'll be sorry!)"
+}
+
+# should we do a backup? probably
+#perform_backup=yes
+
+# by default, we install by copying, so the user can delete this directory.
+# installing by symlink is useful for development, and other purposes.
+install="cp -a"
+
+# the list of files to install. We have to prefix each with a '.' during install.
+list=(
+	bash_profile
+	bashrc
+	bash.d
+)
+
+while getopts ":hlL" option; do
+	case $option in
+		h)	usage
+			exit 0
+			;;
+		l)	install="ln -s"
+			;;
+		:)	echo "$(basename $0): option -$option requires an argument"
+			usage_short
+			exit 1
+			;;
+		?)	echo "$(basename $0): illegal option -- $option"
+			usage_short
+			exit 1
+			;;
+	esac
+done
+
+# First, backup any old bash configuration files so we don't lose them.
+if [ $perform_backup ]; then
+	backup=$(mktemp -d -t .bash_backup)
+	for file in $HOME/.bash*; do
+			mv $file $backup
+	done
+	mv $backup/.bash_history $HOME
+	# don't leave an empty directory hanging around
+	rmdir $backup 2>/dev/null || true
+	mv $backup $HOME 2>/dev/null || true
+fi
+
+for file in ${list[@]}; do
+	 $install $PWD/$file $HOME/.$file
+done
