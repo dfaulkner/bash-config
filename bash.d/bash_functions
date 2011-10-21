@@ -1,0 +1,82 @@
+# prepend or append elements to various system paths
+# example: path_prepend PATH $HOME/bin			PATH=$HOME/bin:$PATH
+# example: path_append MANPATH /usr/local/man	MANPATH=$MANPATH:/usr/local/man
+
+# Join args together using the first arg as glue
+joinargs() { (IFS="$1"; shift && echo "$*") }
+
+# set up the $PREFIX directory if it doesn't exist
+build_prefix()
+{
+	(
+	mkdir -p $PREFIX && cd $PREFIX
+	mkdir -p bin etc include lib opt sbin share share/man tmp var
+	p=`echo $PREFIX | sed -e "s#$HOME/##"`
+	[ ! -e $HOME/tmp ] && ln -s $p/tmp $HOME/tmp
+	)
+}
+
+# append a new path element onto the end of a path variable like $PATH
+# Only works on PATH style variables: item1:item2:item3
+# defaults to $PATH if no path variable specified
+# usage: 	path_append /some/path
+# 			path_append /some/path PATH
+#			path_append /some/path MANPATH
+path_append()
+{
+    if [ -d $1 ]; then
+		echo ${2:-PATH} | egrep "(^|:)$1(:|$)" ||
+		eval ${2:-PATH}=${!2:-$PATH}:$1
+		export ${2:-PATH}
+    fi
+}
+
+# prepend a new path element onto the beginning of a path variable like $PATH
+# Only works on PATH style variables: item1:item2:item3
+# defaults to $PATH if no path variable specified
+# usage: 	path_prepend /some/path
+# 			path_prepend /some/path PATH
+#			path_prepend /some/path MANPATH
+path_prepend()
+{
+    if [ -d $1 ]; then
+		echo ${2:-PATH} | egrep "(^|:)$1(:|$)" ||
+		eval ${2:-PATH}=$1:${!2:-$PATH}
+		export ${2:-PATH}
+    fi
+}
+
+function my_ps() { ps $@ -u $USER -o pid,pcpu,pmem,time,comm ; }
+function pp() { my_ps -o f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
+
+function ask()
+{
+    echo -n "$@" '[y/n] ' ; read ans
+    case "$ans" in
+        y*|Y*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+# Smart 'cd': cd to the file directory if you try to cd to a file
+cd() { if [ -z "$1" ]; then command cd; else if [ -f "$1" ]; then command cd $(dirname "$1"); else command cd "$1"; fi; fi; }
+
+# Query wikipedia by command line
+mwiki() { dig +short txt "$*".wp.dg.cx; }
+
+# vi a new file, make executable.
+vx () { touch "$@"; chmod +x "$@"; vim "$@" ; }
+
+# output text right-aligned. Usage:
+# $ some-command | right
+function right()
+{ 
+	l="$(cat -)"
+	s=$(echo -e "$l" | awk ' { if ( length > L ) { L=length} }END{ print L}')
+	echo "$l" | while read l; do 
+	    j=$(((s-${#l})))
+		echo "$(while ((j-->0)); do printf " ";done;)$l"
+	done
+}
+
+function sortip() { sort -n -t. -k1,1 -k2,2 -k3,3 -k4,4 ; }

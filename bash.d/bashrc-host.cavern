@@ -1,0 +1,7 @@
+# bashrc options specific to cavern
+# only run on hosts named cavern
+
+[ "$HOSTNAME" = "cavern" ] || exit 0
+
+path_prepend /usr/sfw/bin
+path_prepend /opt/sfw/bin
