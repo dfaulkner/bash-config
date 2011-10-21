@@ -23,7 +23,7 @@ list=(
 	bash.d
 )
 
-while getopts ":hlL" option; do
+while getopts ":hl" option; do
 	case $option in
 		h)	usage
 			exit 0
