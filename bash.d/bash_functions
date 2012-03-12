@@ -83,3 +83,4 @@ function sortip() { sort -n -t. -k1,1 -k2,2 -k3,3 -k4,4 ; }
 filext () { echo ${1##*.}; }
 expandurl() { curl -sIL $1 | grep ^Location; }
 addfunction() { declare -f $1 >> ~/.bash.d/bash_functions ; }
+dtsback() { cp "$1" "${1}.$(date +%YY%m%d%H%M%S)" ; }
