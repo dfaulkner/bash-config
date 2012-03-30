@@ -10,7 +10,7 @@ usage() {
 }
 
 # should we do a backup? probably
-#perform_backup=yes
+perform_backup=yes
 
 # by default, we install by copying, so the user can delete this directory.
 # installing by symlink is useful for development, and other purposes.
