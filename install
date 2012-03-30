@@ -43,7 +43,7 @@ done
 
 # First, backup any old bash configuration files so we don't lose them.
 if [ $perform_backup ]; then
-	backup=$(mktemp -d -t .bash_backup)
+	backup=$(mktemp -d ~/.bash_backup.XXXXXX)
 	for file in $HOME/.bash*; do
 			mv $file $backup
 	done
