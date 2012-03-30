@@ -10,9 +10,9 @@
 # PATH
 # default path
 # begin with a path derived from getconf, if available.
-if [ -x /usr/bin/getconf ]; then
-	PATH=$(/usr/bin/getconf PATH)
-fi
+#if [ -x /usr/bin/getconf ]; then
+#	PATH=$(/usr/bin/getconf PATH)
+#fi
 
 # PREFIX
 # base directory for unix-like operations.
