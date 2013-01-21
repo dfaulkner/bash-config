@@ -84,3 +84,5 @@ filext () { echo ${1##*.}; }
 expandurl() { curl -sIL $1 | grep ^Location; }
 addfunction() { declare -f $1 >> ~/.bash.d/bash_functions ; }
 dtsback() { cp "$1" "${1}.$(date +%YY%m%d%H%M%S)" ; }
+expandurl() { curl -s "http://api.longurl.org/v2/expand?url=${1}&format=php" | awk -F '"' '{print $4}' ; }
+
