@@ -67,9 +67,13 @@ mwiki() { dig +short txt "$*".wp.dg.cx; }
 # vi a new file, make executable.
 vx () { touch "$@"; chmod +x "$@"; vim "$@" ; }
 
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
 # output text right-aligned. Usage:
 # $ some-command | right
-function right()
+right()
 { 
 	l="$(cat -)"
 	s=$(echo -e "$l" | awk ' { if ( length > L ) { L=length} }END{ print L}')
@@ -79,10 +83,18 @@ function right()
 	done
 }
 
-function sortip() { sort -n -t. -k1,1 -k2,2 -k3,3 -k4,4 ; }
+sortip() { sort -n -t. -k1,1 -k2,2 -k3,3 -k4,4 ; }
+
+vsortdate() { 
+	local i=${1:-1}
+	local j=$((i+1))
+	local k=$((i+2))
+	sort -bn -k ${i},${i}M -k ${j},${j} -k ${k}.1,${k}.2 -k ${k}.4,${k}.5 -k ${k}.7,${k}.8
+}
+
 filext () { echo ${1##*.}; }
 expandurl() { curl -sIL $1 | grep ^Location; }
 addfunction() { declare -f $1 >> ~/.bash.d/bash_functions ; }
 dtsback() { cp "$1" "${1}.$(date +%YY%m%d%H%M%S)" ; }
+dpkg-diff() { diff -u "${1}.{.,dpkg-old}" ; }
 expandurl() { curl -s "http://api.longurl.org/v2/expand?url=${1}&format=php" | awk -F '"' '{print $4}' ; }
-
