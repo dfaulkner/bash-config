@@ -1,0 +1,2 @@
+export SPLUNK_HOME=/opt/splunk
+path_prepend $SPLUNK_HOME/bin

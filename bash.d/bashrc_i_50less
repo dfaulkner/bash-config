@@ -1,0 +1,14 @@
+# less pager configuration
+# less is more. use it as the pager.
+
+alias more='less'
+export PAGER='less' 
+export LESSCHARSET='latin1'
+
+# various fancy configuration for less
+export LESS='-i -w  -z-4 -g -X -F -R -P%t?f%f \
+:stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+

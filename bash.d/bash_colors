@@ -1,0 +1,15 @@
+#!/bin/bash
+# bash_colors : set color variables for terminal output
+
+
+dark=$(tput setaf 0)
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+purple=$(tput setaf 5)
+cyan=$(tput setaf 6)
+gray=$(tput setaf 7)
+bold=$(tput bold)
+offbold=$(tput rmso)
+reset=$(tput sgr0)
