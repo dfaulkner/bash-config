@@ -39,7 +39,13 @@ dirs=(
 	src
 )
 
-while getopts ":hl" option; do
+# Adust install feature based on OS
+case `uname -s` in
+	Linux|Darwin)	install='cp -a' ;;
+	SunOS)			install='cp -PR' ;;
+esac
+
+whil getopts ":hl" option; do
 	case $option in
 		h)	usage
 			exit 0
