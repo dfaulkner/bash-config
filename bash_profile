@@ -3,7 +3,9 @@
 # the files are located in the bash-doc package.
 
 # the default umask is set in /etc/profile
-umask 022
+# umask of 002 makes files group-writable by default.
+# supports "user private group" model.
+umask 002
 
 
 
