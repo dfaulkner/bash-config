@@ -45,7 +45,7 @@ case `uname -s` in
 	SunOS)			install='cp -PR' ;;
 esac
 
-whil getopts ":hl" option; do
+while getopts ":hl" option; do
 	case $option in
 		h)	usage
 			exit 0
@@ -67,7 +67,7 @@ done
 if [ $perform_backup ]; then
 	backup=$(mktemp -d ~/.bash_backup.XXXXXX)
 	for file in $HOME/.bash*; do
-			mv $file $backup
+			mv $file $backup >/dev/null 2>&1
 	done
 	mv $backup/.bash_history $HOME
 	# don't leave an empty directory hanging around
